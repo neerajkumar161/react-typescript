@@ -1,11 +1,13 @@
 import ReactDom from 'react-dom'
+import { App } from './components/App'
 
-const App = () => {
+const RootApp = () => {
   return (
     <div>
-      <h1>Hello there React App</h1>
+      <h1>Hello there React Root</h1>
+      <App />
     </div>
   )
 }
 
-ReactDom.render(<App />, document.querySelector('#root'))
+ReactDom.render(<RootApp />, document.querySelector('#root'))

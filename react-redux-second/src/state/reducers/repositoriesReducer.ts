@@ -1,15 +1,10 @@
-type TState = {
-  loading: boolean
-  error: string | null
-  data: string[]
-}
+import { TState } from '../actions/types'
+import { TAction } from './../actions/types'
 
-type TAction = {
-  type: 'search_repositories' | 'search_repositories_success' | 'search_repositories_error'
-  payload: any
-}
-
-export const reducer = (state: TState, action: TAction): TState => {
+export const repositoriesReducer = (
+  state: TState = { loading: false, error: null, data: [] },
+  action: TAction
+): TState => {
   switch (action.type) {
     case 'search_repositories':
       return { loading: true, error: null, data: [] }
