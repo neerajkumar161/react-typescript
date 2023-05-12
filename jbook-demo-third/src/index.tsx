@@ -1,12 +1,13 @@
 import * as esbuild from 'esbuild-wasm'
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import ReactDom from 'react-dom'
+import { CodeEditor } from './components/code-editor'
 import { fetchPlugin } from './plugins/fetch-plugin'
 import { unpkgPathPlugin } from './plugins/unkpg-path-plugin'
 
 const RootApp = () => {
   const ref = useRef<esbuild.Service>()
-  const iFrameRef = useRef<any>() 
+  const iFrameRef = useRef<any>()
   const [input, setInput] = useState<string>('')
 
   const startService = async () => {
@@ -30,11 +31,21 @@ const RootApp = () => {
       define: { 'process.env.NODE_ENV': '"production"', global: 'window' }
     })
     console.log({ result })
-    if(iFrameRef.current) {
+    if (iFrameRef.current) {
       iFrameRef.current.contentWindow!.postMessage(result.outputFiles[0].text, '*')
     }
   }
 
+  const onChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value)
+    // npm install --save-exact @monaco-editor/react@3.7.5 --legacy-peer-deps
+    // onSubmit(e.target.value)
+  }
+
+  const onChangeEditorContent = (input: string) => {
+    console.log('Content Changed inside editor', input)
+  }
+  
   useEffect(() => {
     startService()
   }, [])
@@ -59,10 +70,10 @@ const RootApp = () => {
   </body>
   </html>
   `
-  
   return (
     <div>
-      <textarea name='' id='' cols={30} rows={10} onChange={(e) => setInput(e.target.value)} value={input}></textarea>
+      <CodeEditor onChange={onChangeEditorContent}/>
+      <textarea name='' id='' cols={30} rows={10} onChange={onChangeTextArea} value={input}></textarea>
       <div>
         <button onClick={onSubmit}>Submit</button>
       </div>
